@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const joi = require("joi");
 
 const userModel = mongoose.Schema({
   username: String,
