@@ -5,6 +5,7 @@ const customError = require("../utils/error");
 const addNewProduct = async (req, res) => {
   const { name, price, description, category } = req.body;
   const { id } = req;
+  console.log(id);
   const product = await Product.create({
     userid: id,
     name,

@@ -6,7 +6,7 @@ const customError = require("../utils/error");
 const orderProduct = async (req, res) => {
   const id = req.id;
   const userCart = await Cart.findOne({ userId: id });
-  const { street, country, state, postal, city } = req.body;
+  const { street, country, state, postal, city } = req.body.shippingaddress;
   if (!street || !country || !state || !postal || !city) {
     throw new customError(404, "Each field is required!");
   } else {

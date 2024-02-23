@@ -7,9 +7,15 @@ const {
   updateOrder,
 } = require("../controllers/order-controller");
 const tokenverification = require("../middlewares/tokenverification");
+const joiSchemaValidation = require("../middlewares/joiSchemaValidation");
+const { OrderValidationSchema } = require("../utils/validationSchema");
 const checkUserRole = require("../middlewares/checkUserRole");
 
-router.post("/", [tokenverification], orderProduct);
+router.post(
+  "/",
+  [joiSchemaValidation(OrderValidationSchema), tokenverification],
+  orderProduct
+);
 router.get("/:orderId", [tokenverification], getOrder);
 router.get("/", [tokenverification], listAllOrders);
 router.put("/:orderId", [tokenverification, checkUserRole], updateOrder);
