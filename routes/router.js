@@ -5,6 +5,7 @@ const order = require("../routes/order.routes");
 const cart = require("../routes/cart.routes");
 const review = require("../routes/review.routes");
 const upload = require("../routes/upload.routes");
+const payment = require("../routes/payment.routes");
 
 // Importing express router
 const router = require("express").Router();
@@ -21,4 +22,6 @@ router.use("/cart", cart);
 router.use("/reviews", review);
 // Using Upload review routes
 router.use("/uploads", upload);
+
+router.use("/payment", payment);
 module.exports = router;

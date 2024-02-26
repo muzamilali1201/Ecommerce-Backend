@@ -9,7 +9,12 @@ const addToCart = async (req, res) => {
   let { quantity } = req.body;
   let product = await Product.findOne({ _id: productid });
   product = product.toObject();
+  product.totalprice = req.body.quantity
+    ? quantity * product.price
+    : product.price;
   product.quantity = quantity;
+  // await product.save();
+  console.log(product);
   const cart = await Cart.findOne({ userId: userid });
   if (!cart) {
     const cartCreation = await Cart.create({

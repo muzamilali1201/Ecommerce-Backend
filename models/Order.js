@@ -10,6 +10,10 @@ const productSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  totalprice: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const orderSchema = mongoose.Schema(

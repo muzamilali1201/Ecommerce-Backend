@@ -13,7 +13,7 @@ const checkUserRole = require("../middlewares/checkUserRole");
 
 router.post(
   "/",
-  [joiSchemaValidation(OrderValidationSchema), tokenverification],
+  [tokenverification, joiSchemaValidation(OrderValidationSchema)],
   orderProduct
 );
 router.get("/:orderId", [tokenverification], getOrder);

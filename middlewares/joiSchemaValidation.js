@@ -3,7 +3,7 @@ const joi = require("joi");
 
 const joiSchemaValidation = (schema) => {
   return (req, res, next) => {
-    const { error } = joi.object(schema).validate(req.body);
+    const { error } = schema.validate(req.body);
     if (!error) {
       next();
       return;

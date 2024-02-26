@@ -109,7 +109,11 @@ const sendPassLink = async (req, res) => {
       code: crypto.randomBytes(32).toString("hex"),
     });
     const link = `http://localhost:3000/password-reset/${checkemail._id}`;
-    await mailSender(email, link);
+    let message = {
+      action: "resetlink",
+      text: link,
+    };
+    await mailSender(email, message);
     res
       .status(200)
       .json({ message: "Password reset link has sent successfully" });

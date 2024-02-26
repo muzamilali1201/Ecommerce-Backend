@@ -24,7 +24,7 @@ const mailSender = async (to, message, username = "Mr.") => {
       ${message.text}
       
       Thank you,`
-        : message,
+        : message.text,
   });
 };
 

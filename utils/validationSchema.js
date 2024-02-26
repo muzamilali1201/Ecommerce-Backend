@@ -25,30 +25,23 @@ const updateProductValidationSchema = joi.object({
 });
 
 const CartValidationSchema = joi.object({
-  userId: joi.string(),
-  items: joi.array().items(
-    joi.object({
-      id: joi.string().required(),
-      name: joi.string().required(),
-      price: joi.number().required(),
-      description: joi.string().required(),
-      category: joi.string().required(),
-      quantity: joi.number().default(1),
-    })
-  ),
+  quantity: joi.number().required(),
 });
 
 const OrderValidationSchema = joi.object({
   userid: joi.string(),
   products: joi.array().items(
-    joi.object({
-      id: joi.string().required(),
-      name: joi.string().required(),
-      price: joi.number().required(),
-      description: joi.string().required(),
-      category: joi.string().required(),
-      quantity: joi.number().default(1),
-    })
+    joi
+      .object({
+        id: joi.string().required(),
+        name: joi.string().required(),
+        price: joi.number().required(),
+        description: joi.string().required(),
+        category: joi.string().required(),
+        quantity: joi.number().default(1),
+        totalprice: joi.number().default(0),
+      })
+      .required()
   ),
   shippingaddress: joi.object({
     street: joi.string().required(),

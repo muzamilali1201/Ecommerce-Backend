@@ -8,7 +8,11 @@ const productSchema = mongoose.Schema({
   category: String,
   quantity: {
     type: Number,
-    default: 1,
+    required: true,
+  },
+  totalprice: {
+    type: Number,
+    required: true,
   },
 });
 
