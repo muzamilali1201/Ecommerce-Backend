@@ -14,13 +14,13 @@ const {
 const tokenVerification = require("../middlewares/tokenverification");
 const joiSchemaValidation = require("../middlewares/joiSchemaValidation");
 const checkUserRole = require("../middlewares/checkUserRole");
-const userValidationScehma = require("../utils/validationSchema");
+const { userValidationSchema } = require("../utils/validationSchema");
 const router = express.Router();
 
 // Route for user registration
 router.post(
   "/register",
-  [joiSchemaValidation(userValidationScehma)],
+  [joiSchemaValidation(userValidationSchema)],
   registerUser
 );
 
@@ -33,7 +33,7 @@ router.get("/current", [tokenVerification], getCurrentUser);
 // Route for updating user profile
 router.put(
   "/update",
-  [tokenVerification, joiSchemaValidation(userValidationScehma)],
+  [tokenVerification, joiSchemaValidation(userValidationSchema)],
   updateProfile
 );
 

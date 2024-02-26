@@ -72,7 +72,7 @@ const updateOrder = async (req, res) => {
   const orderid = req.params.orderId;
   const OrderToUpdate = await Order.findOne({ _id: orderid });
   if (OrderToUpdate) {
-    OrderToUpdate.status = "Processing";
+    OrderToUpdate.status = req.body.status;
     OrderToUpdate.save();
     res.status(200).json({ message: "Order updated successfully" });
     return;

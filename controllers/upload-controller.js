@@ -6,7 +6,7 @@ const path = require("path");
 const uploadFile = async (req, res) => {
   const file = req.file;
   const title = req.body.title;
-  console.log(title, "The file : ", file);
+  // console.log(title, "The file : ", file);
   const url = `localhost:3000/public/uploads/${file.filename}`;
   const fileToUpload = await Upload.create({
     name: file.filename,

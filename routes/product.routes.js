@@ -14,7 +14,10 @@ const tokenVerification = require("../middlewares/tokenverification");
 const joiSchemaValidation = require("../middlewares/joiSchemaValidation");
 const checkUserRole = require("../middlewares/checkUserRole");
 
-const { productValidationSchema } = require("../utils/validationSchema");
+const {
+  productValidationSchema,
+  updateProductValidationSchema,
+} = require("../utils/validationSchema");
 
 // Creating a router instance
 const router = express.Router();
@@ -40,9 +43,9 @@ router.delete("/:id", [tokenVerification, checkUserRole], DeleteProduct);
 router.put(
   "/:id",
   [
-    joiSchemaValidation(productValidationSchema),
     tokenVerification,
     checkUserRole,
+    joiSchemaValidation(updateProductValidationSchema),
   ],
   UpdateProduct
 );

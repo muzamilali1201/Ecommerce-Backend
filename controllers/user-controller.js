@@ -2,6 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const customError = require("../utils/error");
+const mailSender = require("../utils/nodemailer");
 
 const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
@@ -17,7 +18,7 @@ const registerUser = async (req, res) => {
     email,
     password: hashedPassword,
   });
-
+  mailSender(username, email);
   if (user) {
     res.status(201).json({ message: "User successfully registered" });
   }
