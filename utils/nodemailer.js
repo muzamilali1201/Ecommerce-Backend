@@ -8,23 +8,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const mailSender = async (username, to) => {
+const mailSender = async (to, message, username = "Mr.") => {
   const info = await transporter.sendMail({
     from: process.env.user,
     to: to,
     subject: "Successfully signup",
-    text: `Dear ${username},
-
-        Welcome to E-commerce backend! We're thrilled to have you join our community.
+    text:
+      message.action == "verify"
+        ? ` Dear ${username},
         
-        Thank you for choosing to be a part of our platform. With your new account, you'll have access to a wide range of products and exclusive offers.
-        
-        If you have any questions or need assistance, feel free to reach out to our support team at support@example.com.
-        
-        Happy shopping!
-        
-        Best regards,
-        Muzamal Ali`,
+      Thank you for registering on Ecommerce Backend! We're excited to have you join our community.
+      
+      To complete your registration and start exploring our platform, please verify your email address by clicking the link below:
+      
+      ${message.text}
+      
+      Thank you,`
+        : message,
   });
 };
 

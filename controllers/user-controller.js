@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const customError = require("../utils/error");
 const mailSender = require("../utils/nodemailer");
+const Verification = require("../models/verification");
+const crypto = require("crypto");
 
 const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
@@ -18,7 +20,16 @@ const registerUser = async (req, res) => {
     email,
     password: hashedPassword,
   });
-  mailSender(username, email);
+  const token = await Verification.create({
+    userid: user._id,
+    code: crypto.randomBytes(32).toString("hex"),
+  });
+  const link = `http://localhost:3000/api/v1/${user._id}`;
+  let message = {
+    action: "verify",
+    text: link,
+  };
+  mailSender(email, message, username);
   if (user) {
     res.status(201).json({ message: "User successfully registered" });
   }
@@ -88,6 +99,62 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const sendPassLink = async (req, res) => {
+  // const userid = req.id;
+  const email = req.body.email;
+  const checkemail = await User.findOne({ email: email });
+  if (checkemail) {
+    await Verification.create({
+      userid: checkemail._id,
+      code: crypto.randomBytes(32).toString("hex"),
+    });
+    const link = `http://localhost:3000/password-reset/${checkemail._id}`;
+    await mailSender(email, link);
+    res
+      .status(200)
+      .json({ message: "Password reset link has sent successfully" });
+    return;
+  }
+  throw new customError(500, "User with this email doesn't exist");
+};
+
+const resetPassword = async (req, res) => {
+  const userid = req.params.userid;
+  const token = req.params.token;
+  // console.log(userid, token);
+  const userCheck = await User.findOne({ _id: userid });
+  const password = await bcrypt.hash(req.body.password, 10);
+  const tokenCheck = await Verification.findOne({
+    userid: userid,
+    code: token,
+  });
+  console.log(tokenCheck);
+  if (tokenCheck) {
+    userCheck.password = password;
+    await userCheck.save();
+    await Verification.findByIdAndDelete(userid);
+    res.status(200).json({ message: "Password reset successfully" });
+    return;
+  }
+  throw new customError(404, "Token not found or expired");
+};
+
+const verifyUser = async (req, res) => {
+  const userid = req.params.userid;
+  const token = req.params.token;
+  const tokenCheck = await Verification.findOne({
+    userid: userid,
+    code: token,
+  });
+  console.log(tokenCheck);
+  if (tokenCheck) {
+    await User.findByIdAndUpdate(userid, { verified: true }, { new: true });
+    res.status(200).json({ message: "User verified successfully!" });
+    return;
+  }
+  throw new customError(500, "Something went wrong");
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -95,4 +162,7 @@ module.exports = {
   getAllUser,
   updateProfile,
   updatePassword,
+  sendPassLink,
+  resetPassword,
+  verifyUser,
 };

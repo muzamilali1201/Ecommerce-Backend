@@ -8,6 +8,9 @@ const {
   getAllUser,
   updateProfile,
   updatePassword,
+  sendPassLink,
+  resetPassword,
+  verifyUser,
 } = require("../controllers/user-controller");
 
 // Middlewares
@@ -42,5 +45,11 @@ router.put("/password", [tokenVerification], updatePassword);
 
 // Route for getting all users (restricted to specific user roles)
 router.get("/alluser", [tokenVerification, checkUserRole], getAllUser);
+
+router.post("/password-reset", sendPassLink);
+
+router.post("/password-reset/:userid/:token", resetPassword);
+
+router.post("/verify/:userid/:token", verifyUser);
 
 module.exports = router;
