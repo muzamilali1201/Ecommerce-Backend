@@ -22,10 +22,11 @@ const paymentCheckOut = async (req, res) => {
           quantity: elem.quantity,
         };
       }),
-      success_url: `http://localhost:3000/success`,
+      success_url: `http://localhost:3000/api/v1/payment/success/${userid}`,
       cancel_url: `http://localhost:3000/cancel`,
     });
     let payment = await Payment.create({
+      userid: userid,
       paymentid: session_url.id,
       payment_mode: session_url.payment_method_types,
       currency: session_url.currency,
@@ -41,4 +42,17 @@ const paymentCheckOut = async (req, res) => {
   throw new customError(404, "Orders not found for this user");
 };
 
-module.exports = { paymentCheckOut };
+const paymentSuccess = async (req, res) => {
+  const userid = req.params.userid;
+  console.log(userid);
+  const payment = await Payment.findOne({ userid: userid });
+  if (payment) {
+    payment.verified = true;
+    await payment.save();
+    res.status(200).json({ message: "Payment verified successfully" });
+    return;
+  }
+  throw new customError(404, "Payment for this user not found!");
+};
+
+module.exports = { paymentCheckOut, paymentSuccess };
