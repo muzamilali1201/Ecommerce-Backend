@@ -1,220 +1,163 @@
 # E-commerce Backend API Documentation
 
-This documentation provides details about the routes available in the E-commerce backend API. These routes facilitate various functionalities such as user management, product management, order processing, cart management, review management, and file management.
+Welcome to the API documentation for the E-commerce Backend project. This documentation outlines the endpoints and functionalities provided by the backend server for managing various aspects of an e-commerce platform.
 
-## User Routes
+## Authentication Endpoints
 
 ### Register User
-
-- **Route:** POST /api/user/register
-- **Description:** Registers a new user with the system.
-- **Middleware:** None
-- **Parameters:**
-  - username: String (required)
-  - email: String (required)
-  - password: String (required)
-- **Returns:** JSON object with user details and access token.
-
+- **POST** `/register`
+  - Registers a new user with the provided details.
+  - Requires valid user data.
+  
 ### Login User
-
-- **Route:** POST /api/user/login
-- **Description:** Logs in an existing user.
-- **Middleware:** None
-- **Parameters:**
-  - email: String (required)
-  - password: String (required)
-- **Returns:** JSON object with user details and access token.
+- **POST** `/login`
+  - Authenticates a user and generates a JWT token for subsequent requests.
+  - Requires valid user credentials.
 
 ### Get Current User
-
-- **Route:** GET /api/user/current
-- **Description:** Retrieves details of the current logged-in user.
-- **Middleware:** Token verification
-- **Parameters:** None
-- **Returns:** JSON object with user details.
+- **GET** `/current`
+  - Retrieves information about the currently authenticated user.
+  - Requires a valid JWT token.
 
 ### Update User Profile
-
-- **Route:** PUT /api/user/update
-- **Description:** Updates the profile information of the current user.
-- **Middleware:** Token verification
-- **Parameters:** User details to be updated (username, email, etc.)
-- **Returns:** JSON object with updated user details.
+- **PUT** `/update`
+  - Updates the profile information of the current user.
+  - Requires valid user data and a JWT token.
 
 ### Update User Password
-
-- **Route:** PUT /api/user/password
-- **Description:** Updates the password of the current user.
-- **Middleware:** Token verification
-- **Parameters:** Old and new password
-- **Returns:** Success message if password is updated successfully.
+- **PUT** `/password`
+  - Allows the current user to update their password.
+  - Requires a valid JWT token.
 
 ### Get All Users
+- **GET** `/alluser`
+  - Retrieves information about all users (restricted to specific user roles).
+  - Requires a valid JWT token with appropriate permissions.
 
-- **Route:** GET /api/user/alluser
-- **Description:** Retrieves details of all users (restricted to admin users).
-- **Middleware:** Token verification, Check user role
-- **Parameters:** None
-- **Returns:** JSON array of user objects.
+### Send Password Reset Link
+- **POST** `/password-reset`
+  - Sends a password reset link to the user's email address.
 
-## Product Routes
+### Reset Password
+- **POST** `/password-reset/:userid/:token`
+  - Allows the user to reset their password using a reset token.
+
+### Verify User
+- **POST** `/verify/:userid/:token`
+  - Verifies the user's email address using a verification token.
+
+## Product Management Endpoints
 
 ### Add New Product
-
-- **Route:** POST /api/product
-- **Description:** Adds a new product to the system.
-- **Middleware:** Token verification, Check user role
-- **Parameters:** Product details (name, description, price, etc.)
-- **Returns:** JSON object with product details.
+- **POST** `/`
+  - Adds a new product to the database.
+  - Requires valid product data and authentication with appropriate permissions.
 
 ### List All Products
-
-- **Route:** GET /api/product
-- **Description:** Retrieves details of all products.
-- **Middleware:** None
-- **Parameters:** None
-- **Returns:** JSON array of product objects.
+- **GET** `/`
+  - Retrieves a list of all products available in the database.
 
 ### Delete Product
-
-- **Route:** DELETE /api/product/:id
-- **Description:** Deletes a product by ID.
-- **Middleware:** Token verification, Check user role
-- **Parameters:** Product ID
-- **Returns:** Success message if product is deleted successfully.
+- **DELETE** `/:id`
+  - Deletes a product from the database by ID.
+  - Requires authentication and appropriate permissions.
 
 ### Update Product
-
-- **Route:** PUT /api/product/:id
-- **Description:** Updates a product by ID.
-- **Middleware:** Token verification, Check user role
-- **Parameters:** Product ID and updated details
-- **Returns:** JSON object with updated product details.
+- **PUT** `/:id`
+  - Updates the details of a product specified by ID.
+  - Requires valid product data, authentication, and appropriate permissions.
 
 ### Get Product
+- **GET** `/:id`
+  - Retrieves details of a product specified by ID.
 
-- **Route:** GET /api/product/:id
-- **Description:** Retrieves details of a product by ID.
-- **Middleware:** None
-- **Parameters:** Product ID
-- **Returns:** JSON object with product details.
-
-## Order Routes
-
-### Order Product
-
-- **Route:** POST /api/order
-- **Description:** Places an order for a product.
-- **Middleware:** Token verification
-- **Parameters:** Product ID and order details
-- **Returns:** JSON object with order details.
-
-### Get Order
-
-- **Route:** GET /api/order/:orderId
-- **Description:** Retrieves details of an order by order ID.
-- **Middleware:** Token verification
-- **Parameters:** Order ID
-- **Returns:** JSON object with order details.
-
-### List All Orders
-
-- **Route:** GET /api/order
-- **Description:** Retrieves details of all orders.
-- **Middleware:** Token verification
-- **Parameters:** None
-- **Returns:** JSON array of order objects.
-
-### Update Order
-
-- **Route:** PUT /api/order/:orderId
-- **Description:** Updates an order by order ID (restricted to admin users).
-- **Middleware:** Token verification, Check user role
-- **Parameters:** Order ID and updated details
-- **Returns:** JSON object with updated order details.
-
-## Cart Routes
+## Cart Management Endpoints
 
 ### Add to Cart
-
-- **Route:** POST /api/cart/add/:productId
-- **Description:** Adds a product to the user's cart.
-- **Middleware:** Token verification
-- **Parameters:** Product ID
-- **Returns:** JSON object with updated cart details.
+- **POST** `/add/:productId`
+  - Adds a product to the user's cart.
+  - Requires authentication and valid product data.
 
 ### Remove from Cart
-
-- **Route:** POST /api/cart/remove/:productId
-- **Description:** Removes a product from the user's cart.
-- **Middleware:** Token verification
-- **Parameters:** Product ID
-- **Returns:** JSON object with updated cart details.
+- **POST** `/remove/:productId`
+  - Removes a product from the user's cart.
+  - Requires authentication.
 
 ### Update Cart
-
-- **Route:** POST /api/cart/update/:productId
-- **Description:** Updates the quantity of a product in the user's cart.
-- **Middleware:** Token verification
-- **Parameters:** Product ID and updated quantity
-- **Returns:** JSON object with updated cart details.
+- **POST** `/update/:productId`
+  - Updates the quantity of a product in the user's cart.
+  - Requires authentication.
 
 ### View Cart
+- **GET** `/all`
+  - Retrieves the contents of the user's cart.
+  - Requires authentication.
 
-- **Route:** GET /api/cart/all
-- **Description:** Retrieves details of the user's cart.
-- **Middleware:** Token verification
-- **Parameters:** None
-- **Returns:** JSON object with cart details.
+## Order Management Endpoints
 
-## Review Routes
+### Place Order
+- **POST** `/`
+  - Places a new order for the user.
+  - Requires authentication and valid order data.
+
+### Get Order
+- **GET** `/:orderId`
+  - Retrieves details of a specific order by ID.
+  - Requires authentication.
+
+### List All Orders
+- **GET** `/`
+  - Retrieves a list of all orders placed by the user.
+  - Requires authentication.
+
+### Update Order
+- **PUT** `/:orderId`
+  - Updates the status of an order specified by ID.
+  - Requires authentication and appropriate permissions.
+
+## Review Management Endpoints
 
 ### Add Review
-
-- **Route:** POST /api/review/:productId
-- **Description:** Adds a review for a product.
-- **Middleware:** Token verification
-- **Parameters:** Product ID and review details
-- **Returns:** JSON object with review details.
+- **POST** `/:productId`
+  - Adds a review for a product.
+  - Requires authentication and valid review data.
 
 ### Get Review
+- **GET** `/:productId`
+  - Retrieves reviews for a specific product.
+  - Requires authentication.
 
-- **Route:** GET /api/review/:productId
-- **Description:** Retrieves reviews for a product.
-- **Middleware:** Token verification
-- **Parameters:** Product ID
-- **Returns:** JSON array of review objects.
-
-## File Routes
+## File Management Endpoints
 
 ### Upload File
-
-- **Route:** POST /api/upload
-- **Description:** Uploads a file to the server.
-- **Middleware:** Token verification, Check user role
-- **Parameters:** File to be uploaded
-- **Returns:** JSON object with file details.
+- **POST** `/`
+  - Uploads a file to the server.
+  - Requires authentication, appropriate permissions, and valid file upload.
 
 ### Get File
-
-- **Route:** GET /api/upload/:filename
-- **Description:** Retrieves a file by filename.
-- **Middleware:** Token verification
-- **Parameters:** Filename
-- **Returns:** File download/stream.
+- **GET** `/:filename`
+  - Retrieves a file from the server by filename.
+  - Requires authentication.
 
 ### Remove File
-
-- **Route:** DELETE /api/upload/:filename
-- **Description:** Deletes a file by filename.
-- **Middleware:** Token verification, Check user role
-- **Parameters:** Filename
-- **Returns:** Success message if file is deleted successfully.
+- **DELETE** `/:filename`
+  - Deletes a file from the server by filename.
+  - Requires authentication and appropriate permissions.
 
 ### List All Files
+- **GET** `/`
+  - Retrieves a list of all files stored on the server.
+  - Requires authentication.
 
-- **Route:** GET /api/upload
-- **Description:** Retrieves details of all uploaded files.
-- **Middleware:** Token verification, Check user role
-- **Parameters:** None
-- **Returns:** JSON array of file objects.
+## Payment Management Endpoints
+
+### Checkout
+- **POST** `/checkout`
+  - Initiates the checkout process for the user's cart.
+  - Requires authentication and valid cart data.
+
+### Payment Success
+- **GET** `/success/:userid`
+  - Handles the success callback after a successful payment.
+  - Requires authentication.
+
